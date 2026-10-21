@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Travesía de Sir Papaleta</title>
+    <style>
+        /* FRONTEND: Diseño y Estilos (CSS) - TEMA PERGAMINO/LIBRO ANTIGUO */
+        
+        /* Importar fuente clásica */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=IM+Fell+English:ital@0;1&display=swap');
+
+        body {
+            background-color: #2b1f15; /* Fondo oscuro de madera/cuero */
+            background-image: radial-gradient(#3e2c1e 15%, transparent 16%), radial-gradient(#3e2c1e 15%, transparent 16%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            color: #3b2818; /* Tinta marrón oscuro */
+            font-family: 'IM Fell English', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #game-container {
+            /* Efecto de pergamino viejo */
+            background-color: #f4e8d3;
+            background-image: 
+                linear-gradient(90deg, rgba(200, 175, 140, 0.5) 0%, rgba(244, 232, 211, 0) 5%, rgba(244, 232, 211, 0) 95%, rgba(200, 175, 140, 0.5) 100%),
+                radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 100%);
+            width: 850px;
+            max-width: 95%;
+            height: 90vh; /* Altura máxima para no desbordar */
+            border: 8px solid #5c3a21; /* Borde de cuero oscuro */
+            border-radius: 4px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 90, 43, 0.4);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Pantalla de Inicio (Portada del Libro) */
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+            padding: 40px;
+            background-image: radial-gradient(circle, #f4e8d3 40%, #d8c3a5 100%);
+        }
+
+        #start-title {
+            font-family: 'Cinzel', serif;
+            font-size: 55px;
+            color: #5c3a21;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+            border-bottom: 2px solid #8b5a2b;
+            padding-bottom: 15px;
+        }
+
+        #start-subtitle {
+            font-size: 24px;
+            font-style: italic;
+            color: #8b5a2b;
+            margin-bottom: 50px;
+        }
+
+        .play-btn {
+            background-color: #5c3a21;
+            color: #f4e8d3;
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            padding: 15px 50px;
+            border: 2px solid #3b2818;
+            border-radius: 3px;
+            cursor: pointer;
+            box-shadow: 3px 3px 8px rgba(0,0,0,0.4);
+            transition: all 0.3s;
+        }
+
+        .play-btn:hover {
+            background-color: #8b5a2b;
+            transform: scale(1.05);
+        }
+
+        /* Interfaz del Juego (Páginas del Libro) */
+        #game-interface {
+            display: none; /* Oculto inicialmente */
+            flex-direction: column;
+            height: 100%;
+        }
+
+        #scene-header {
+            font-family: 'Cinzel', serif;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            border-bottom: 2px dashed #8b5a2b; /* Línea separadora estilo libro */
+            color: #5c3a21;
+        }
+
+        #story-box {
+            padding: 25px 40px;
+            font-size: 21px;
+            line-height: 1.6;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto; /* Scroll si el texto es muy largo */
+        }
+
+        /* Estilo para la barra de scroll (para que no desentone) */
+        #story-box::-webkit-scrollbar { width: 8px; }
+        #story-box::-webkit-scrollbar-track { background: transparent; }
+        #story-box::-webkit-scrollbar-thumb { background: #8b5a2b; border-radius: 4px; }
+
+        #scene-image {
+            width: 100%;
+            max-height: 280px;
+            object-fit: cover;
+            border-radius: 2px;
+            border: 4px solid #3b2818;
+            margin-bottom: 20px;
+            filter: sepia(0.4) contrast(1.1); /* Da un toque vintage a las imágenes */
+            display: none; 
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        }
+
+        #story-text {
+            width: 100%;
+            text-align: justify;
+        }
+
+        .math-problem {
+            background-color: rgba(92, 58, 33, 0.1); /* Fondo semi-transparente marrón */
+            padding: 20px;
+            border-left: 4px solid #8b5a2b;
+            border-right: 4px solid #8b5a2b;
+            margin: 20px 0;
+            font-family: 'Courier New', Courier, monospace; /* Mantiene legibilidad matemática */
+            font-size: 18px;
+            width: 90%;
+            color: #3b2818;
+            font-weight: bold;
+            box-shadow: inset 0 0 10px rgba(139, 90, 43, 0.2);
+        }
+
+        #options-container {
+            display: flex;
+            flex-direction: column;
+            padding: 20px 40px;
+            border-top: 2px dashed #8b5a2b;
+        }
+
+        .option-btn {
+            background-color: transparent;
+            color: #5c3a21;
+            border: 2px solid #8b5a2b;
+            padding: 12px;
+            margin: 8px 0;
+            font-size: 19px;
+            font-family: 'IM Fell English', serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .option-btn::before {
+            content: '❧'; /* Símbolo decorativo antiguo */
+            position: absolute;
+            left: 15px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .option-btn:hover {
+            background-color: rgba(139, 90, 43, 0.15);
+            color: #3b2818;
+        }
+
+        .option-btn:hover::before {
+            opacity: 1;
+        }
+
+        /* =====================================================
+           LABORATORIOS DE COMPROBACIÓN (etapas previas a responder)
+           ===================================================== */
+        #lab-box {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .lab-instr {
+            font-size: 17px;
+            font-style: italic;
+            text-align: center;
+            margin: 6px 0;
+            color: #5c3a21;
+            line-height: 1.4;
+        }
+
+        .lab-sub {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            margin: 16px 0 4px;
+            color: #5c3a21;
+            border-bottom: 1px solid #8b5a2b;
+            width: 90%;
+            text-align: center;
+        }
+
+        .lab-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 8px 0;
+            font-size: 18px;
+        }
+
+        .lab-input {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 17px;
+            width: 80px;
+            padding: 5px 8px;
+            border: 2px solid #8b5a2b;
+            background: #fbf3e1;
+            color: #3b2818;
+            text-align: center;
+        }
+        .lab-input.wide { width: 110px; }
+        .lab-input.ok { border-color: #2f6b2a; background: #d9ecd0; }
+        .lab-input.bad { border-color: #8b2a1b; background: #f2cfc7; }
+
+        .lab-actions { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; justify-content: center; }
+
+        .lab-btn {
+            background-color: #5c3a21;
+            color: #f4e8d3;
+            font-family: 'Cinzel', serif;
+            font-size: 15px;
+            padding: 8px 20px;
+            border: 2px solid #3b2818;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .lab-btn:hover { background-color: #8b5a2b; }
+        .lab-btn.secondary { background: transparent; color: #5c3a21; border-color: #8b5a2b; }
+        .lab-btn.secondary:hover { background: rgba(139, 90, 43, 0.15); }
+        .lab-btn.active { background: #3f6b5a; border-color: #2c4d40; color: #f4e8d3; }
+
+        .lab-live {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+            padding: 8px 14px;
+            background: rgba(92, 58, 33, 0.1);
+            border-left: 4px solid #8b5a2b;
+            border-right: 4px solid #8b5a2b;
+            text-align: center;
+        }
+
+        .lab-msg {
+            margin-top: 10px;
+            padding: 10px 16px;
+            font-size: 18px;
+            text-align: center;
+            width: 90%;
+            box-sizing: border-box;
+            border: 2px solid #8b5a2b;
+            line-height: 1.45;
+        }
+        .lab-msg.good { background: rgba(120, 170, 100, 0.25); border-color: #2f6b2a; }
+        .lab-msg.warn { background: rgba(190, 90, 60, 0.18); border-color: #8b2a1b; }
+        .lab-msg.info { background: rgba(139, 90, 43, 0.12); }
+
+        .lab-svg {
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            background: rgba(255, 250, 235, 0.55);
+            border: 3px double #8b5a2b;
+        }
+        .lab-svg .rlabel {
+            font-family: 'Cinzel', serif;
+            font-size: 17px;
+            fill: #5c3a21;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+        .lab-svg .dtext {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 15px;
+            text-anchor: middle;
+            dominant-baseline: central;
+            fill: #3b2818;
+            pointer-events: none;
+        }
+        .lab-svg .tlabel {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        table.lab-table {
+            border-collapse: collapse;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            width: 90%;
+            margin-top: 8px;
+        }
+        table.lab-table th, table.lab-table td {
+            border: 1px solid #8b5a2b;
+            padding: 3px 8px;
+            text-align: center;
+        }
+        table.lab-table th { background: rgba(139, 90, 43, 0.2); }
+        table.lab-table tr.sel td { background: rgba(217, 164, 65, 0.4); }
+
+        .combo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+            gap: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            width: 90%;
+            box-sizing: border-box;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 2px dashed #8b5a2b;
+            padding: 6px;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        /* Etapa Venn */
+        .venn-pool {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            min-height: 46px;
+            padding: 8px 12px;
+            width: 90%;
+            box-sizing: border-box;
+            border: 2px dashed #8b5a2b;
+            background: rgba(92, 58, 33, 0.07);
+            margin-bottom: 10px;
+        }
+        .venn-pool .empty { font-size: 16px; font-style: italic; opacity: 0.7; align-self: center; }
+
+        .chip {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 18px;
+            min-width: 42px;
+            height: 38px;
+            border: 2px solid #5c3a21;
+            border-radius: 50%;
+            background: #f4e8d3;
+            color: #3b2818;
+            cursor: pointer;
+            transition: transform 0.15s, background 0.15s;
+        }
+        .chip:hover { background: #e6d2ae; transform: scale(1.08); }
+        .chip.selected { background: #5c3a21; color: #f4e8d3; transform: scale(1.15); }
+
+        #venn-svg .region { cursor: pointer; transition: stroke-width 0.15s; }
+        #venn-svg .region:hover { stroke-width: 4; }
+        #venn-svg .placed { cursor: pointer; }
+        #venn-svg .placed circle { fill: #f4e8d3; stroke: #3b2818; stroke-width: 2; }
+        #venn-svg .placed text {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 16px;
+            text-anchor: middle;
+            dominant-baseline: central;
+            fill: #3b2818;
+            pointer-events: none;
+        }
+        #venn-svg .placed.ok circle { fill: #bfdcb0; stroke: #2f6b2a; }
+        #venn-svg .placed.bad circle { fill: #e9b3a8; stroke: #8b2a1b; }
+        #venn-svg .placed:hover circle { stroke-width: 3; }
+
+        /* Respuesta abierta */
+        .open-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .open-q { font-size: 19px; text-align: center; margin: 0 0 4px 0; font-weight: bold; color: #5c3a21; }
+        .open-form .option-btn { width: 70%; }
+
+        /* ----- Tabla de comprobación de valores de x (Cap. II) ----- */
+        .quick-x { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 6px; }
+        .quick-x .chip { min-width: 38px; height: 34px; font-size: 16px; }
+        table.lab-table tr.dup td { background: rgba(190, 90, 60, 0.25); }
+        table.lab-table .del {
+            background: transparent; border: none; color: #8b2a1b;
+            font-size: 16px; font-weight: bold; cursor: pointer;
+        }
+
+        /* ----- Inducción por pasos (Cap. III) ----- */
+        .step-card {
+            width: 92%;
+            box-sizing: border-box;
+            border: 2px solid #8b5a2b;
+            padding: 10px 16px;
+            margin: 8px 0;
+            background: rgba(92, 58, 33, 0.07);
+        }
+        .step-card.locked { border-color: #2f6b2a; background: rgba(120, 170, 100, 0.2); }
+        .step-title { font-family: 'Cinzel', serif; font-size: 18px; color: #5c3a21; margin-bottom: 4px; }
+        .step-q { font-size: 19px; margin-bottom: 6px; }
+        .step-opt {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            color: #5c3a21;
+            border: 2px solid #8b5a2b;
+            padding: 9px 12px;
+            margin: 6px 0;
+            font-size: 17px;
+            font-family: 'IM Fell English', serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .step-opt:hover { background-color: rgba(139, 90, 43, 0.15); }
+        .step-opt.wrong { border-color: #8b2a1b; background: rgba(190, 90, 60, 0.18); text-decoration: line-through; opacity: 0.75; }
+        .step-fb { font-size: 16px; font-style: italic; color: #8b2a1b; margin-top: 4px; }
+        .step-ok { font-size: 17px; color: #2f6b2a; margin-top: 4px; }
+
+        /* ----- Objeto recibido (Libro de los Gnomos / Tarjeta Mágica) ----- */
+        #reward-box {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .reward-frame {
+            width: 100%;
+            max-width: 420px;
+            height: 260px;
+            border: 4px double #5c3a21;
+            background: rgba(92, 58, 33, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        }
+        .reward-frame img { width: 100%; height: 100%; object-fit: cover; filter: sepia(0.4) contrast(1.1); }
+        .reward-ph { font-style: italic; padding: 20px; color: #8b5a2b; font-size: 18px; }
+        .reward-name { font-family: 'Cinzel', serif; font-size: 24px; margin-top: 12px; color: #5c3a21; }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        
+        <!-- PANTALLA DE INICIO (Portada) -->
+        <div id="start-screen">
+            <h1 id="start-title">La Travesía de<br>Sir Papaleta</h1>
+            <h2 id="start-subtitle">El Tomo de la Lógica Arcana</h2>
+            <button class="play-btn" onclick="startGame()">Abrir el Libro</button>
+        </div>
+
+        <!-- INTERFAZ DEL JUEGO (Páginas) -->
+        <div id="game-interface">
+            <div id="scene-header">Título</div>
+            <div id="story-box">
+                <img id="scene-image" src="" alt="Imagen de la escena">
+                <p id="story-text">Historia...</p>
+                <div id="math-box" class="math-problem" style="display: none;"></div>
+                <!-- Etapa interactiva de comprobación (laboratorio) -->
+                <div id="lab-box"></div>
+                <!-- Objeto recibido (imagen editable) -->
+                <div id="reward-box"></div>
+            </div>
+            <div id="options-container">
+                <!-- Botones generados por JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BACKEND / LÓGICA: JavaScript -->
+    <script>
+        // Enunciados que se reutilizan entre la etapa de comprobación y la de respuesta
+        const PROBLEMA_1 = "A = { x ∈ N | 1 < x ≤ 7 }\nB = { x ∈ Z | x es par, -2 ≤ x ≤ 7 }\n\n¿Cuál es la intersección (A ∩ B) para tu Diagrama de Venn?";
+        const PROBLEMA_2 = "¿La trayectoria mágica f(x) = 3x - 7 es una Función Inyectiva?\n(Pista: si f(x1) = f(x2), ¿x1 = x2?)";
+        const PROBLEMA_3 = "Demuestra: k² + (2(k+1) - 1) = ?\n\nk² + 2k + 2 - 1\nk² + 2k + 1";
+
+        // BASE DE DATOS DE ESCENARIOS
+        // lab:  nombre del laboratorio de comprobación que se muestra en la escena
+        // open: la escena pide una respuesta escrita (no de elección)
+        const storyData = {
+            inicio: {
+                title: "Prólogo",
+                text: "El reino ha caído bajo la influencia de la malvada Bruja Ana Catalena, quien secuestró a la princesa Mercy. Sir Papaleta Tercero inicia su viaje armado solo con una humilde daga, confiando en la 'Lógica Arcana' que le enseñó la Gran Bruja Ashe.",
+                image: "papaletainicio.jpg",
+                math: "",
+                options: [ { text: "Comenzar la aventura", next: "escenario1_intro" } ]
+            },
+            
+            // ESCENARIO 1: TROLL
+            escenario1_intro: {
+                title: "Capítulo I: Adentrándose en el Bosque",
+                text: "Sir Papaleta se adentra en la espesura. De repente, la tierra tiembla y un colosal Troll verde y repulsivo bloquea el paso. Al invocar la Espada del Árbol Escarlata, el caballero nota una barrera mágica parpadeando alrededor del monstruo.",
+                image: "troll.jpg",
+                math: "",
+                options: [ { text: "Analizar la barrera del Troll", next: "escenario1_prob" } ]
+            },
+            escenario1_prob: {
+                title: "El Despertar de la Espada",
+                text: "Para atravesar la barrera mágica de Ana Catalena, debes alinear la frecuencia de tu Espada (Conjunto A) con las fisuras de la armadura del Troll (Conjunto B).",
+                image: "", 
+                math: PROBLEMA_1,
+                options: [ { text: "Comprobar mi procedimiento en el Diagrama de Venn", next: "escenario1_venn" } ]
+            },
+            escenario1_venn: {
+                title: "El Espejo de Venn",
+                text: "Antes de atacar, la Espada de Papaleta proyecta un Espejo de Venn. Coloca cada número en el diagrama: toca un número y luego la región donde crees que pertenece. Puedes probar tantas veces como quieras.",
+                image: "",
+                math: "A = { x ∈ N | 1 < x ≤ 7 }\nB = { x ∈ Z | x es par, -2 ≤ x ≤ 7 }",
+                lab: "venn",
+                options: [ { text: "Ya comprobé mi resultado: elegir mi respuesta", next: "escenario1_resp" } ]
+            },
+            escenario1_resp: {
+                title: "El Despertar de la Espada",
+                text: "La barrera del Troll vibra, esperando tu decisión. Con tu diagrama como guía, elige la intersección correcta.",
+                image: "",
+                math: PROBLEMA_1,
+                options: [
+                    { text: "A ∩ B = {2, 3, 4}", next: "gameover" },
+                    { text: "A ∩ B = {2, 4, 6}", next: "escenario2_intro" }
+                ]
+            },
+
+            // ESCENARIO 2: GNOMOS
+            escenario2_intro: {
+                title: "Capítulo II: Emboscada en los Susurros",
+                text: "Con el Troll derrotado, obtienes el Arco del Viento. Pero el descanso es breve. Una horda de gnomos comienza a correr a tu alrededor a una velocidad vertiginosa, creando ilusiones ópticas para confundirte.",
+                image: "gnomo1.jpg",
+                math: "",
+                options: [ { text: "Tensar el arco y preparar el encantamiento", next: "escenario2_prob" } ]
+            },
+            escenario2_prob: {
+                title: "La Precisión del Arco",
+                text: "Atacar a ciegas desperdiciaría flechas en ilusiones. Papaleta debe usar un encantamiento basado en una Función Inyectiva para asegurar que cada flecha impacte a un gnomo distinto (salida única).",
+                image: "gnomo.jpg",
+                math: PROBLEMA_2,
+                options: [ { text: "Probar la trayectoria en el Banco de Pruebas", next: "escenario2_lab" } ]
+            },
+            escenario2_lab: {
+                title: "El Banco de Pruebas del Arco",
+                text: "Antes de disparar, Papaleta dibuja la trayectoria sobre la arena. Cada flecha sale de una entrada x y llega a una salida f(x). Prueba valores de x en la tabla y busca si dos flechas distintas pueden terminar en el mismo gnomo.",
+                image: "",
+                math: "f(x) = 3x - 7",
+                lab: "inj",
+                options: [ { text: "Ya comprobé mi resultado: elegir mi respuesta", next: "escenario2_resp" } ]
+            },
+            escenario2_resp: {
+                title: "La Precisión del Arco",
+                text: "El Arco del Viento vibra, listo para el disparo. Con lo que descubriste en el Banco de Pruebas, decide.",
+                image: "gnomo.jpg",
+                math: PROBLEMA_2,
+                options: [
+                    { text: "Dos flechas impactarían al mismo gnomo.", next: "gameover" },
+                    { text: "Salidas iguales implican entradas iguales.", next: "escenario2_libro" }
+                ]
+            },
+
+            escenario2_libro: {
+                title: "Objeto Obtenido",
+                text: "Las flechas aciertan una a una y la horda de gnomos se dispersa. Entre las hojas caídas, uno de ellos deja atrás un objeto antiguo: ¡has recibido el Libro de los Gnomos!",
+                image: "",
+                math: "",
+                reward: { name: "Libro de los Gnomos", image: "librognomo.jpg" },
+                options: [ { text: "Guardar el libro y continuar", next: "escenario3_intro" } ]
+            },
+
+            // ESCENARIO 3: CÍCLOPES
+            escenario3_intro: {
+                title: "Capítulo III: Las Montañas Quebradas",
+                text: "Al pie del volcán, encuentras el mítico Escudo del Guardián. De inmediato, Gigantes y Cíclopes emergen de las rocas y comienzan a arrojar peñascos masivos en una lluvia incesante. El escudo normal se romperá si no lo encantas.",
+                image: "escudo.jpg",
+                math: "",
+                options: [ { text: "Invocar hechizo defensivo", next: "escenario3_prob" } ]
+            },
+            escenario3_prob: {
+                title: "La Fortaleza del Escudo",
+                text: "Usas Inducción Matemática para demostrar que tu escudo condensará la fuerza de avalanchas infinitas (n). Supusiste que para 'k' golpes, resiste k². Ahora recibes el golpe definitivo (k+1).",
+                image: "",
+                math: PROBLEMA_3,
+                options: [ { text: "Verificar la demostración en la Forja de Inducción", next: "escenario3_lab" } ]
+            },
+            escenario3_lab: {
+                title: "La Forja de la Inducción",
+                text: "Antes de que caiga el siguiente peñasco, Papaleta forja su hipótesis: si el escudo resiste k² golpes, sumar el golpe número (k+1) debe dar exactamente (k+1)². Antes de forjar, ordena tu demostración: elige el paso base, la hipótesis y el paso inductivo.",
+                image: "",
+                math: "P(n):  1 + 3 + 5 + … + (2n − 1) = n²",
+                lab: "ind",
+                options: [ { text: "Ya comprobé mi resultado: elegir mi respuesta", next: "escenario3_resp" } ]
+            },
+            escenario3_resp: {
+                title: "La Fortaleza del Escudo",
+                text: "El escudo brilla, esperando el encantamiento final. ¿En qué se condensa la fuerza del golpe (k+1)?",
+                image: "",
+                math: PROBLEMA_3,
+                options: [
+                    { text: "Se condensa en: (k+1)²", next: "escenario3_tarjeta" },
+                    { text: "Se debilita en: 2k+1", next: "gameover" }
+                ]
+            },
+
+            escenario3_tarjeta: {
+                title: "Objeto Obtenido",
+                text: "El escudo resiste la última avalancha y los Cíclopes huyen entre el polvo. Sobre las rocas queda brillando un objeto: ¡has recibido la Tarjeta Mágica!",
+                image: "",
+                math: "",
+                reward: { name: "Tarjeta Mágica", image: "tarjetamagica.jpg" },
+                options: [ { text: "Guardar la tarjeta y avanzar al portal", next: "climax_intro" } ]
+            },
+
+            // CLÍMAX: LA BRUJA
+            climax_intro: {
+                title: "Clímax: El Portal Radiante",
+                text: "Has llegado a la guarida. Frente al portal hay un Yunque Mágico. El cartel dice: 'Tienes 4 intentos para imbuir tus 3 armas con las 3 bendiciones que son la debilidad exacta de La Gran Bruja (existen 7 bendiciones). Falla y la puerta se sella para siempre'.",
+                image: "bendicion.jpg",
+                math: "",
+                options: [ { text: "Fase 1: Calcular combinaciones a lo bruto", next: "climax_fase1" } ]
+            },
+            climax_fase1: {
+                title: "Fase 1: El Testeo Bruto",
+                text: "En un momento de pánico, calculas tus opciones. Como el orden de las armas en el yunque no importa, aplicas combinaciones para 7 bendiciones tomadas de 3 en 3. Resuélvelo tú mismo en el Yunque de Cálculo.",
+                image: "",
+                math: "C(n,k) = n! / [k! * (n-k)!]\n\nC(7,3) = ?",
+                lab: "comb",
+                options: [ { text: "Fase 2: Analizar el Libro de los Gnomos", next: "climax_fase2" } ]
+            },
+            climax_fase2: {
+                title: "Fase 2: Probabilidad Genética",
+                text: "El libro muestra que el Bisabuelo era débil a (3) y (4). Una pista dice: 'Su nacimiento fue un milagro imposible'. Aplicas el Binomio de Newton a la genética de 4ta generación de la bruja. Explora el árbol genealógico para ver de dónde salen los coeficientes.",
+                image: "",
+                math: "(0.9x + 0.1y)^4\n\nx = hereda la debilidad (0.9)\ny = NO la hereda (0.1)\n\n¿Qué probabilidad tiene el término y⁴?",
+                lab: "tree",
+                options: [ { text: "Fase 3: Recalcular y usar Tarjeta Mágica", next: "climax_fase3" } ]
+            },
+            climax_fase3: {
+                title: "Fase 3: La Decisión de la Tarjeta",
+                text: "Sin la (3) y (4), te quedan 5 bendiciones. C(5,3) = 10 combinaciones. Aún son demasiadas. Sacas la Tarjeta Mágica, que te obliga a elegir una sola ayuda antes de destruirse. Calcula ambas opciones y escribe tu decisión.",
+                image: "",
+                math: "Opción A (Saber 1 debilidad): faltan 2 armas entre 4 bendiciones restantes.\n\nOpción B (Saber 1 bendición inútil): faltan 3 armas entre 4 bendiciones útiles restantes.\n\nTienes 4 intentos en el yunque.",
+                lab: "calc",
+                open: "Escribe tu decisión: ¿qué opción eliges (A o B) y cuántas combinaciones te quedan por probar con ella?",
+                options: []
+            },
+
+            // FINALES
+            gameover: {
+                title: "La Lógica Falló",
+                text: "Tus cálculos fueron incorrectos. La magia se volvió inestable y fuiste derrotado. La princesa Mercy seguirá cautiva. Recuerda: las matemáticas no perdonan errores de procedimiento.",
+                image: "muerte.png",
+                math: "",
+                options: [ { text: "Cerrar el libro y reiniciar", next: "inicio_restart" } ]
+            },
+            victoria: {
+                title: "¡Victoria Arcana!",
+                text: "¡Elegiste la Opción B! Al eliminar otra bendición inútil, el yunque te garantizó el éxito en tus 4 intentos. Las armas resonaron, el portal se abrió y la Bruja fue despojada de su poder. Has rescatado a la princesa demostrando que la mejor arma es el intelecto.",
+                image: "princesa.jpg",
+                math: "",
+                options: [ { text: "Cerrar el libro", next: "inicio_restart" } ]
+            }
+        };
+
+        // CONTROLADOR DE ESCENAS
+        const startScreen = document.getElementById('start-screen');
+        const gameInterface = document.getElementById('game-interface');
+        const headerEl = document.getElementById('scene-header');
+        const textEl = document.getElementById('story-text');
+        const imageEl = document.getElementById('scene-image');
+        const mathBoxEl = document.getElementById('math-box');
+        const optionsContainer = document.getElementById('options-container');
+        const labBoxEl = document.getElementById('lab-box');
+        const rewardBoxEl = document.getElementById('reward-box');
+
+        // Función para pasar de la Portada al Juego
+        function startGame() {
+            startScreen.style.display = 'none';
+            gameInterface.style.display = 'flex';
+            loadScene('inicio');
+        }
+
+        function loadScene(sceneKey) {
+            // Manejar reinicio especial para volver a la portada
+            if(sceneKey === 'inicio_restart') {
+                gameInterface.style.display = 'none';
+                startScreen.style.display = 'flex';
+                return;
+            }
+
+            const scene = storyData[sceneKey];
+            
+            headerEl.textContent = scene.title;
+            textEl.textContent = scene.text;
+
+            // Manejo de la imagen
+            if (scene.image && scene.image !== "") {
+                imageEl.src = scene.image;
+                imageEl.style.display = "block";
+            } else {
+                imageEl.style.display = "none";
+            }
+
+            // Manejo de problemas matemáticos
+            if (scene.math && scene.math !== "") {
+                mathBoxEl.innerText = scene.math;
+                mathBoxEl.style.display = "block";
+            } else {
+                mathBoxEl.style.display = "none";
+            }
+
+            // Laboratorio de comprobación (si la escena tiene uno)
+            if (scene.lab && LABS[scene.lab]) {
+                LABS[scene.lab]();
+            } else {
+                labBoxEl.style.display = 'none';
+                labBoxEl.innerHTML = '';
+            }
+
+            // Objeto recibido (con espacio de imagen editable)
+            rewardBoxEl.style.display = 'none';
+            rewardBoxEl.innerHTML = '';
+            if (scene.reward) renderReward(scene.reward);
+
+            document.getElementById('story-box').scrollTop = 0;
+
+            // Generar botones de elección
+            optionsContainer.innerHTML = '';
+            (scene.options || []).forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option.text;
+                btn.onclick = () => loadScene(option.next);
+                optionsContainer.appendChild(btn);
+            });
+
+            // Respuesta abierta (si la escena la pide)
+            if (scene.open) renderOpenAnswer(scene.open);
+        }
+
+        /* =========================================================
+           UTILIDADES COMUNES DE LOS LABORATORIOS
+           ========================================================= */
+        function num(id) {
+            const el = document.getElementById(id);
+            if (!el) return NaN;
+            const v = el.value.trim().replace(',', '.').replace('%', '');
+            return v === '' ? NaN : Number(v);
+        }
+        function fact(n) { let r = 1; for (let i = 2; i <= n; i++) r *= i; return r; }
+        function comb(n, k) { let r = 1; for (let i = 1; i <= k; i++) r = r * (n - k + i) / i; return Math.round(r); }
+        function popcount(n) { return n.toString(2).split('1').length - 1; }
+        function round6(v) { return Math.round(v * 1e6) / 1e6; }
+        function setMsg(id, type, html) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.className = 'lab-msg ' + type;
+            el.innerHTML = html;
+            el.style.display = 'block';
+        }
+        function mark(id, ok) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.remove('ok', 'bad');
+            if (ok === true) el.classList.add('ok');
+            else if (ok === false) el.classList.add('bad');
+        }
+
+        const LABS = { venn: initVenn, inj: initInj, ind: initInd, comb: initComb, tree: initTree, calc: initCalc };
+
+        /* =========================================================
+           LAB 1 · DIAGRAMA DE VENN INTERACTIVO (Capítulo I)
+           ========================================================= */
+        const VENN_A = [2, 3, 4, 5, 6, 7];          // x ∈ N, 1 < x ≤ 7
+        const VENN_B = [-2, 0, 2, 4, 6];            // x ∈ Z, par, -2 ≤ x ≤ 7
+        const VENN_UNIVERSE = [-2, -1, 0, 1, 2, 3, 4, 5, 6, 7];
+
+        let venn = { placed: {}, selected: null, checked: null, message: null };
+
+        function correctRegion(n) {
+            const inA = VENN_A.includes(n), inB = VENN_B.includes(n);
+            if (inA && inB) return 'AB';
+            if (inA) return 'A';
+            if (inB) return 'B';
+            return 'N';
+        }
+
+        function initVenn() {
+            venn = { placed: {}, selected: null, checked: null, message: null };
+            labBoxEl.style.display = 'flex';
+            renderVenn();
+        }
+
+        function slotPositions(region, count) {
+            const pos = [];
+            const cfg = {
+                A:  { cx: 185, cy: 160, cols: 3, gap: 38 },
+                AB: { cx: 320, cy: 160, cols: 2, gap: 36 },
+                B:  { cx: 455, cy: 160, cols: 3, gap: 38 },
+                N:  { cx: 55,  cy: 45,  cols: 2, gap: 38, startAnchor: true }
+            }[region];
+            const rows = Math.ceil(count / cfg.cols);
+            for (let i = 0; i < count; i++) {
+                const r = Math.floor(i / cfg.cols), c = i % cfg.cols;
+                const inRow = Math.min(cfg.cols, count - r * cfg.cols);
+                let x, y;
+                if (cfg.startAnchor) {
+                    x = cfg.cx + c * cfg.gap;
+                    y = cfg.cy + r * cfg.gap;
+                } else {
+                    x = cfg.cx + (c - (inRow - 1) / 2) * cfg.gap;
+                    y = cfg.cy + (r - (rows - 1) / 2) * cfg.gap;
+                }
+                pos.push({ x, y });
+            }
+            return pos;
+        }
+
+        function renderVenn() {
+            const pool = VENN_UNIVERSE.filter(n => !(n in venn.placed));
+
+            let poolHTML = pool.length
+                ? pool.map(n => `<button class="chip ${venn.selected === n ? 'selected' : ''}" onclick="selectChip(${n})">${n}</button>`).join('')
+                : `<span class="empty">Todos los números están en el diagrama.</span>`;
+
+            let placedSVG = '';
+            ['A', 'AB', 'B', 'N'].forEach(region => {
+                const nums = VENN_UNIVERSE.filter(n => venn.placed[n] === region);
+                const pos = slotPositions(region, nums.length);
+                nums.forEach((n, i) => {
+                    let cls = 'placed';
+                    if (venn.checked) cls += venn.checked[n] ? ' ok' : ' bad';
+                    placedSVG += `<g class="${cls}" onclick="removeChip(${n})">
+                        <title>Toca para devolver el ${n} a la lista</title>
+                        <circle cx="${pos[i].x}" cy="${pos[i].y}" r="17"/>
+                        <text x="${pos[i].x}" y="${pos[i].y}">${n}</text></g>`;
+                });
+            });
+
+            const inter = VENN_UNIVERSE.filter(n => venn.placed[n] === 'AB');
+            const liveText = `Según tu diagrama: A ∩ B = { ${inter.join(', ')} }`;
+
+            const msg = venn.message
+                ? `<div class="lab-msg ${venn.message.type}">${venn.message.html}</div>` : '';
+
+            labBoxEl.innerHTML = `
+                <p class="lab-instr">Universo: los enteros de -2 a 7. Toca un número y luego la región donde pertenece.</p>
+                <div class="venn-pool">${poolHTML}</div>
+                <svg id="venn-svg" class="lab-svg" viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <clipPath id="clipA"><circle cx="240" cy="160" r="130"/></clipPath>
+                    </defs>
+                    <rect class="region" x="2" y="2" width="636" height="316" fill="transparent" stroke="#5c3a21" stroke-width="2" onclick="placeIn('N')"/>
+                    <circle class="region" cx="240" cy="160" r="130" fill="#8b5a2b" fill-opacity="0.28" stroke="#5c3a21" stroke-width="2.5" onclick="placeIn('A')"/>
+                    <circle class="region" cx="400" cy="160" r="130" fill="#3f6b5a" fill-opacity="0.28" stroke="#3b5a4d" stroke-width="2.5" onclick="placeIn('B')"/>
+                    <circle class="region" cx="400" cy="160" r="130" clip-path="url(#clipA)" fill="#7a3b2e" fill-opacity="0.30" stroke="#7a3b2e" stroke-width="2.5" onclick="placeIn('AB')"/>
+                    <text class="rlabel" x="150" y="38">A</text>
+                    <text class="rlabel" x="490" y="38">B</text>
+                    <text class="rlabel" x="320" y="38">A ∩ B</text>
+                    <text class="rlabel" x="590" y="304" style="font-size:14px">fuera</text>
+                    ${placedSVG}
+                </svg>
+                <div class="lab-live">${liveText}</div>
+                ${msg}
+                <div class="lab-actions">
+                    <button class="lab-btn" onclick="checkVenn()">Comprobar diagrama</button>
+                    <button class="lab-btn secondary" onclick="resetVenn()">Limpiar</button>
+                </div>`;
+        }
+
+        function selectChip(n) {
+            venn.selected = (venn.selected === n) ? null : n;
+            venn.message = null;
+            renderVenn();
+        }
+        function placeIn(region) {
+            if (venn.selected === null) {
+                venn.message = { type: 'info', html: 'Primero toca un número de la lista y luego la región.' };
+                renderVenn();
+                return;
+            }
+            venn.placed[venn.selected] = region;
+            venn.selected = null;
+            venn.checked = null;
+            venn.message = null;
+            renderVenn();
+        }
+        function removeChip(n) {
+            delete venn.placed[n];
+            venn.checked = null;
+            venn.message = null;
+            renderVenn();
+        }
+        function resetVenn() {
+            venn = { placed: {}, selected: null, checked: null, message: null };
+            renderVenn();
+        }
+        function checkVenn() {
+            const missing = VENN_UNIVERSE.filter(n => !(n in venn.placed));
+            const results = {};
+            const wrong = [];
+            VENN_UNIVERSE.forEach(n => {
+                if (n in venn.placed) {
+                    const ok = venn.placed[n] === correctRegion(n);
+                    results[n] = ok;
+                    if (!ok) wrong.push(n);
+                }
+            });
+            venn.checked = results;
+
+            if (missing.length) {
+                venn.message = { type: 'info', html: `Aún faltan por ubicar: <b>${missing.join(', ')}</b>.${wrong.length ? `<br>Revisa también: <b>${wrong.join(', ')}</b> (marcados en rojo).` : ''}` };
+            } else if (wrong.length) {
+                venn.message = { type: 'warn', html: `Hay ${wrong.length} número(s) mal ubicado(s): <b>${wrong.join(', ')}</b> (en rojo).<br>Pista: revisa si cumplen las condiciones de A, de B, o de ambos.` };
+            } else {
+                const inter = VENN_UNIVERSE.filter(n => venn.placed[n] === 'AB');
+                venn.message = { type: 'good', html: `¡Diagrama correcto! Tu intersección es A ∩ B = { ${inter.join(', ')} }.<br>Ya puedes elegir tu respuesta.` };
+            }
+            renderVenn();
+        }
+
+        /* =========================================================
+           OBJETO RECIBIDO (Libro de los Gnomos, Tarjeta Mágica)
+           Coloca tu imagen con el nombre indicado en reward.image
+           (libro_gnomos.jpg, tarjeta_magica.jpg). Mientras no exista,
+           se muestra un espacio reservado.
+           ========================================================= */
+        function renderReward(reward) {
+            rewardBoxEl.innerHTML = '';
+            const frame = document.createElement('div');
+            frame.className = 'reward-frame';
+
+            const ph = document.createElement('div');
+            ph.className = 'reward-ph';
+            ph.style.display = 'none';
+            ph.textContent = 'Espacio para imagen: ' + reward.image;
+
+            const img = document.createElement('img');
+            img.alt = reward.name;
+            img.onerror = () => { img.style.display = 'none'; ph.style.display = 'block'; };
+            img.src = reward.image;
+
+            frame.appendChild(img);
+            frame.appendChild(ph);
+
+            const name = document.createElement('div');
+            name.className = 'reward-name';
+            name.textContent = '✦ ' + reward.name + ' ✦';
+
+            rewardBoxEl.appendChild(frame);
+            rewardBoxEl.appendChild(name);
+            rewardBoxEl.style.display = 'flex';
+        }
+
+        /* =========================================================
+           LAB 2 · TABLA DE COMPROBACIÓN DE VALORES DE X (Capítulo II)
+           f(x) = 3x - 7. El jugador prueba valores y ve si alguna
+           salida se repite con entradas distintas.
+           ========================================================= */
+        let fnState = { xs: [], msg: null };
+        const fnF = x => round6(3 * x - 7);
+
+        function initInj() {
+            fnState = { xs: [], msg: null };
+            labBoxEl.style.display = 'flex';
+            renderInj();
+        }
+
+        function renderInj() {
+            const rows = fnState.xs.map(x => ({ x, y: fnF(x) }));
+            rows.forEach(r => { r.dup = rows.some(o => o.x !== r.x && o.y === r.y); });
+
+            // Diagrama de entradas (X) y salidas (Y) con flechas
+            const ys = [...new Set(rows.map(r => r.y))];
+            const posX = {}, posY = {};
+            rows.forEach((r, i) => { posX[r.x] = 40 + (i + 1) * (200 / (rows.length + 1)); });
+            ys.forEach((y, i) => { posY[y] = 40 + (i + 1) * (200 / (ys.length + 1)); });
+
+            let svg = `<svg class="lab-svg" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg">
+                <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 z" fill="#7a3b2e"/></marker></defs>
+                <ellipse cx="150" cy="140" rx="75" ry="115" fill="#8b5a2b" fill-opacity="0.22" stroke="#5c3a21" stroke-width="2.5"/>
+                <ellipse cx="450" cy="140" rx="75" ry="115" fill="#3f6b5a" fill-opacity="0.22" stroke="#3b5a4d" stroke-width="2.5"/>
+                <text class="rlabel" x="150" y="22">X (entradas)</text>
+                <text class="rlabel" x="450" y="22">Y (salidas)</text>`;
+            rows.forEach(r => {
+                svg += `<line x1="178" y1="${posX[r.x]}" x2="420" y2="${posY[r.y]}" stroke="${r.dup ? '#8b2a1b' : '#7a3b2e'}" stroke-width="2" marker-end="url(#ah)"/>`;
+            });
+            rows.forEach(r => {
+                svg += `<circle cx="150" cy="${posX[r.x]}" r="17" fill="#f4e8d3" stroke="#3b2818" stroke-width="2"/><text class="dtext" x="150" y="${posX[r.x]}">${r.x}</text>`;
+            });
+            ys.forEach(y => {
+                svg += `<circle cx="450" cy="${posY[y]}" r="17" fill="#f4e8d3" stroke="#3b2818" stroke-width="2"/><text class="dtext" x="450" y="${posY[y]}">${y}</text>`;
+            });
+            svg += `</svg>`;
+
+            // Tabla de comprobación
+            let table;
+            if (rows.length) {
+                table = `<table class="lab-table">
+                    <tr><th>x</th><th>3x − 7</th><th>f(x)</th><th>¿Salida repetida?</th><th></th></tr>
+                    ${rows.map(r => `<tr class="${r.dup ? 'dup' : ''}">
+                        <td>${r.x}</td><td>3(${r.x}) − 7</td><td>${r.y}</td>
+                        <td>${r.dup ? 'Sí' : 'No'}</td>
+                        <td><button class="del" title="Quitar" onclick="removeX(${r.x})">✕</button></td></tr>`).join('')}
+                </table>`;
+            } else {
+                table = `<p class="lab-instr">Aún no has probado ningún valor de x.</p>`;
+            }
+
+            // Mensaje de estado
+            let msg = fnState.msg;
+            if (!msg && rows.length >= 2) {
+                msg = rows.some(r => r.dup)
+                    ? { type: 'warn', html: 'Hay entradas distintas con la misma salida.' }
+                    : { type: 'info', html: `Con ${rows.length} valores probados, cada x distinta tiene una salida distinta.` };
+            }
+            const msgHTML = msg ? `<div class="lab-msg ${msg.type}">${msg.html}</div>` : '';
+
+            const quick = [-2, -1, 0, 1, 2, 3, 4].map(n =>
+                `<button class="chip" onclick="addX(${n})">${n}</button>`).join('');
+
+            labBoxEl.innerHTML = `
+                <p class="lab-instr">Prueba valores de x en f(x) = 3x − 7 y observa si alguna salida se repite.</p>
+                <div class="quick-x">${quick}</div>
+                <div class="lab-row">
+                    x = <input id="fx-input" class="lab-input" type="number" step="any" onkeydown="if(event.key==='Enter'){addXFromInput();}">
+                    <button class="lab-btn" onclick="addXFromInput()">Probar</button>
+                    <button class="lab-btn secondary" onclick="clearInj()">Limpiar</button>
+                </div>
+                ${svg}
+                ${table}
+                ${msgHTML}`;
+        }
+
+        function addXFromInput() {
+            const v = num('fx-input');
+            if (isNaN(v)) {
+                fnState.msg = { type: 'info', html: 'Escribe un número válido para x.' };
+                renderInj();
+            } else {
+                addX(v);
+            }
+            const again = document.getElementById('fx-input');
+            if (again) again.focus();
+        }
+
+        function addX(x) {
+            if (fnState.xs.includes(x)) {
+                fnState.msg = { type: 'info', html: `Ya probaste x = ${x}. Prueba con otro valor.` };
+            } else if (fnState.xs.length >= 8) {
+                fnState.msg = { type: 'info', html: 'Ya tienes 8 valores. Quita alguno para probar otros.' };
+            } else {
+                fnState.xs.push(x);
+                fnState.msg = null;
+            }
+            renderInj();
+        }
+
+        function removeX(x) {
+            fnState.xs = fnState.xs.filter(v => v !== x);
+            fnState.msg = null;
+            renderInj();
+        }
+
+        function clearInj() {
+            fnState = { xs: [], msg: null };
+            renderInj();
+        }
+
+        /* =========================================================
+           LAB 3 · INDUCCIÓN POR PASOS (Capítulo III)
+           Elegir el paso base, luego la hipótesis y luego el
+           paso inductivo.
+           ========================================================= */
+        const IND_STEPS = [
+            {
+                title: "Paso 1: Paso base",
+                q: "¿Cuál es el paso base?",
+                okMsg: "Correcto: el paso base verifica el primer caso.",
+                opts: [
+                    { t: "Comprobar n = 1:  1 = 1²", ok: true },
+                    { t: "Suponer que se cumple para n = k", ok: false, fb: "Eso es la hipótesis, no el paso base." },
+                    { t: "Demostrar que se cumple para n = k + 1", ok: false, fb: "Eso es el paso inductivo." }
+                ]
+            },
+            {
+                title: "Paso 2: Hipótesis inductiva",
+                q: "¿Cuál es la hipótesis?",
+                okMsg: "Correcto: se asume cierto el caso k para usarlo después.",
+                opts: [
+                    { t: "Comprobar n = 1:  1 = 1²", ok: false, fb: "Eso es el paso base." },
+                    { t: "Suponer cierto para n = k:  1 + 3 + … + (2k − 1) = k²", ok: true },
+                    { t: "Probar que  k² + (2(k+1) − 1) = (k+1)²", ok: false, fb: "Eso es parte del paso inductivo." }
+                ]
+            },
+            {
+                title: "Paso 3: Paso inductivo",
+                q: "¿Cuál es el paso inductivo?",
+                okMsg: "Correcto: usando la hipótesis se llega al caso k + 1.",
+                opts: [
+                    { t: "Suponer cierto para n = k:  1 + 3 + … + (2k − 1) = k²", ok: false, fb: "Eso es la hipótesis." },
+                    { t: "Comprobar n = 1:  1 = 1²", ok: false, fb: "Eso es el paso base." },
+                    { t: "Usando la hipótesis, probar n = k + 1:  k² + (2(k+1) − 1) = k² + 2k + 1 = (k+1)²", ok: true }
+                ]
+            }
+        ];
+
+        let ind = { done: 0, fb: null, wrong: [] };
+
+        function initInd() {
+            ind = { done: 0, fb: null, wrong: [] };
+            labBoxEl.style.display = 'flex';
+            renderInd();
+        }
+
+        function renderInd() {
+            let html = '';
+            for (let i = 0; i < ind.done; i++) {
+                const s = IND_STEPS[i];
+                const right = s.opts.find(o => o.ok);
+                html += `<div class="step-card locked">
+                    <div class="step-title">${s.title} ✓</div>
+                    <div>${right.t}</div>
+                    <div class="step-ok">${s.okMsg}</div></div>`;
+            }
+            if (ind.done < IND_STEPS.length) {
+                const s = IND_STEPS[ind.done];
+                html += `<div class="step-card">
+                    <div class="step-title">${s.title}</div>
+                    <div class="step-q">${s.q}</div>
+                    ${s.opts.map((o, i) => `<button class="step-opt ${ind.wrong.includes(i) ? 'wrong' : ''}" onclick="pickInd(${i})">${o.t}</button>`).join('')}
+                    ${ind.fb ? `<div class="step-fb">${ind.fb}</div>` : ''}
+                </div>`;
+            } else {
+                html += `<div class="lab-msg good">¡Demostración completa! Paso base, hipótesis y paso inductivo en orden.</div>`;
+            }
+            labBoxEl.innerHTML = html;
+        }
+
+        function pickInd(i) {
+            const opt = IND_STEPS[ind.done].opts[i];
+            if (opt.ok) {
+                ind.done++;
+                ind.fb = null;
+                ind.wrong = [];
+            } else {
+                if (!ind.wrong.includes(i)) ind.wrong.push(i);
+                ind.fb = opt.fb;
+            }
+            renderInd();
+        }
+
+        /* =========================================================
+           LAB 4 · YUNQUE DE CÁLCULO: C(7,3) A LO BRUTO (Clímax, fase 1)
+           ========================================================= */
+        function initComb() {
+            labBoxEl.style.display = 'flex';
+            labBoxEl.innerHTML = `
+                <p class="lab-instr">C(7,3) = 7! / [3!·(7−3)!] = 7! / (3!·4!). Como 7! = 7·6·5·4!, el 4! se cancela. Completa:</p>
+                <div class="lab-row">Numerador: 7 · 6 · 5 = <input id="cb-num" class="lab-input" type="number" step="any"></div>
+                <div class="lab-row">Denominador: 3! = <input id="cb-den" class="lab-input" type="number" step="any"></div>
+                <div class="lab-row">
+                    Resultado: C(7,3) = <input id="cb-res" class="lab-input" type="number" step="any">
+                    <button class="lab-btn" onclick="checkComb()">Comprobar</button>
+                </div>
+                <div id="cb-msg" class="lab-msg" style="display:none"></div>
+                <div class="lab-sub">Verificación por conteo</div>
+                <p class="lab-instr">Enumera las bendiciones 1 a 7 de tres en tres (sin importar el orden) y cuenta:</p>
+                <div class="lab-actions" style="margin-top:2px">
+                    <button class="lab-btn secondary" onclick="listCombos()">Listar todas las combinaciones</button>
+                </div>
+                <div id="cb-list-title" class="lab-instr"></div>
+                <div id="cb-list" class="combo-grid" style="display:none"></div>`;
+        }
+
+        function checkComb() {
+            const n = num('cb-num'), d = num('cb-den'), r = num('cb-res');
+            if (isNaN(n) && isNaN(d) && isNaN(r)) return setMsg('cb-msg', 'info', 'Completa los casilleros para comprobar.');
+            mark('cb-num', isNaN(n) ? null : n === 210);
+            mark('cb-den', isNaN(d) ? null : d === 6);
+            mark('cb-res', isNaN(r) ? null : r === 35);
+            if (n === 210 && d === 6 && r === 35) {
+                setMsg('cb-msg', 'good', `C(7,3) = 7! / [3!·4!] = 210 / 6 = <b>35</b> combinaciones posibles.<br>¡Tener 35 combinaciones y solo 4 intentos es un suicidio! Necesitas investigar.`);
+            } else {
+                setMsg('cb-msg', 'warn', 'Hay errores (en rojo). Pista: 7·6 = 42, luego ·5; 3! = 3·2·1; y el resultado es numerador ÷ denominador.');
+            }
+        }
+
+        function listCombos() {
+            const items = [];
+            for (let a = 1; a <= 7; a++)
+                for (let b = a + 1; b <= 7; b++)
+                    for (let c = b + 1; c <= 7; c++)
+                        items.push(`${a}·${b}·${c}`);
+            const grid = document.getElementById('cb-list');
+            grid.innerHTML = items.map(t => `<span>${t}</span>`).join('');
+            grid.style.display = 'grid';
+            document.getElementById('cb-list-title').textContent = `Total listado: ${items.length} combinaciones.`;
+        }
+
+        /* =========================================================
+           LAB 5 · ÁRBOL GENEALÓGICO Y BINOMIO DE NEWTON (Clímax, fase 2)
+           ========================================================= */
+        let treeK = null;
+
+        function initTree() {
+            treeK = null;
+            labBoxEl.style.display = 'flex';
+            let btns = '';
+            for (let k = 0; k <= 4; k++) {
+                btns += `<button class="lab-btn secondary" id="tree-btn-${k}" onclick="selectTreeK(${k})">y = ${k}</button>`;
+            }
+            labBoxEl.innerHTML = `
+                <p class="lab-instr">Cada nivel es una generación hacia atrás. Rama izquierda = hereda la debilidad (x, 0.9). Rama derecha = NO la hereda (y, 0.1). Cada hoja muestra cuántas veces ocurrió y en esas 4 generaciones.</p>
+                <svg id="tree-svg" class="lab-svg" viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg"></svg>
+                <p class="lab-instr">Elige cuántas generaciones NO heredan (y) para resaltar los caminos:</p>
+                <div class="lab-actions" style="margin-top:2px">${btns}</div>
+                <div id="tree-detail" style="width:100%;display:flex;flex-direction:column;align-items:center"></div>
+                <div class="lab-sub">Comprueba tu cálculo</div>
+                <p class="lab-instr">¿Qué probabilidad hay de que NINGUNA de las 4 generaciones herede la debilidad? (término y⁴, en %)</p>
+                <div class="lab-row">
+                    <input id="tree-pct" class="lab-input" type="text" placeholder="en %"> %
+                    <button class="lab-btn" onclick="checkTreePct()">Comprobar</button>
+                </div>
+                <div id="tree-msg" class="lab-msg" style="display:none"></div>`;
+            updateTree();
+        }
+
+        function selectTreeK(k) {
+            treeK = (treeK === k) ? null : k;
+            updateTree();
+        }
+
+        function treeSVG(k) {
+            const X = (L, j) => { const span = Math.pow(2, 4 - L); return 20 + (j * span + (span - 1) / 2) * 40; };
+            const Y = L => 25 + L * 62;
+            let s = '';
+            for (let L = 0; L < 4; L++) {
+                for (let j = 0; j < Math.pow(2, L); j++) {
+                    for (let c = 0; c < 2; c++) {
+                        s += `<line x1="${X(L, j)}" y1="${Y(L)}" x2="${X(L + 1, 2 * j + c)}" y2="${Y(L + 1)}" stroke="${c === 0 ? '#5c3a21' : '#3f6b5a'}" stroke-width="1.5"/>`;
+                    }
+                }
+            }
+            s += `<text class="tlabel" x="232" y="50" text-anchor="end" fill="#5c3a21">x · 0.9</text>`;
+            s += `<text class="tlabel" x="408" y="50" fill="#3f6b5a">y · 0.1</text>`;
+            for (let L = 0; L < 4; L++) {
+                for (let j = 0; j < Math.pow(2, L); j++) {
+                    s += `<circle cx="${X(L, j)}" cy="${Y(L)}" r="5" fill="#8b5a2b"/>`;
+                }
+            }
+            s += `<text class="tlabel" x="334" y="29" fill="#3b2818">Bruja</text>`;
+            for (let i = 0; i < 16; i++) {
+                const ys = popcount(i);
+                const hl = (k !== null && ys === k);
+                s += `<circle cx="${20 + i * 40}" cy="${Y(4)}" r="13" fill="${hl ? '#d9a441' : '#f4e8d3'}" stroke="${hl ? '#7a3b2e' : '#3b2818'}" stroke-width="${hl ? 3 : 1.5}"/>`;
+                s += `<text class="dtext" x="${20 + i * 40}" y="${Y(4)}">${ys}</text>`;
+            }
+            return s;
+        }
+
+        function updateTree() {
+            document.getElementById('tree-svg').innerHTML = treeSVG(treeK);
+            for (let k = 0; k <= 4; k++) {
+                const b = document.getElementById('tree-btn-' + k);
+                b.className = 'lab-btn ' + (treeK === k ? 'active' : 'secondary');
+            }
+
+            let rows = '', total = 0;
+            for (let k = 0; k <= 4; k++) {
+                const c = comb(4, k);
+                const p = Math.pow(0.9, 4 - k) * Math.pow(0.1, k);
+                const t = c * p;
+                total += t;
+                rows += `<tr class="${treeK === k ? 'sel' : ''}">
+                    <td>x<sup>${4 - k}</sup> y<sup>${k}</sup></td><td>C(4,${k}) = ${c}</td>
+                    <td>${p.toFixed(4)}</td><td>${t.toFixed(4)}</td><td>${(t * 100).toFixed(2)}%</td></tr>`;
+            }
+            rows += `<tr><td colspan="3"><b>Suma de todos los términos</b></td><td><b>${total.toFixed(4)}</b></td><td><b>${(total * 100).toFixed(0)}%</b></td></tr>`;
+
+            let extra = '';
+            if (treeK !== null) {
+                const c = comb(4, treeK);
+                const p = Math.pow(0.9, 4 - treeK) * Math.pow(0.1, treeK);
+                extra = `<div class="lab-live">y = ${treeK}: hay C(4,${treeK}) = ${c} caminos en el árbol.<br>Cada uno vale 0.9<sup>${4 - treeK}</sup> · 0.1<sup>${treeK}</sup> = ${p.toFixed(4)}<br>Término: ${c} × ${p.toFixed(4)} = ${(c * p).toFixed(4)}</div>`;
+            }
+
+            document.getElementById('tree-detail').innerHTML = `
+                ${extra}
+                <table class="lab-table">
+                    <tr><th>Término</th><th>Caminos</th><th>Prob. por camino</th><th>Término</th><th>%</th></tr>
+                    ${rows}
+                </table>`;
+        }
+
+        function checkTreePct() {
+            const v = num('tree-pct');
+            if (isNaN(v)) return setMsg('tree-msg', 'info', 'Escribe tu respuesta como número (por ejemplo, 5 o 0.5).');
+            if (Math.abs(v - 0.01) < 1e-9) {
+                setMsg('tree-msg', 'good', `¡Exacto! 0.1⁴ = 0.0001 = 0.01%.<br>La Bruja es el milagro: por eso descartas (3) y (4).`);
+            } else if (Math.abs(v - 0.0001) < 1e-9) {
+                setMsg('tree-msg', 'good', `0.0001 es correcto como decimal; en porcentaje es <b>0.01%</b>.<br>La Bruja es el milagro: por eso descartas (3) y (4).`);
+            } else {
+                setMsg('tree-msg', 'warn', 'Pista: el término y⁴ es C(4,4) · 0.9⁰ · 0.1⁴. Selecciona y = 4 en el árbol para verlo.');
+            }
+        }
+
+        /* =========================================================
+           LAB 6 · CALCULADORA DE COMBINACIONES (Clímax, fase 3)
+           ========================================================= */
+        function initCalc() {
+            labBoxEl.style.display = 'flex';
+            labBoxEl.innerHTML = `
+                <p class="lab-instr">Calculadora del Yunque: C(n,k) = n! / [k!·(n−k)!]. Recuerda que solo tienes 4 intentos.</p>
+                <div class="lab-row">
+                    C( <input id="cc-n" class="lab-input" type="number" step="1" min="0" max="12"> ,
+                    <input id="cc-k" class="lab-input" type="number" step="1" min="0" max="12"> )
+                    <button class="lab-btn" onclick="runCalc()">Calcular</button>
+                </div>
+                <div class="lab-actions" style="margin-top:2px">
+                    <button class="lab-btn secondary" onclick="setCalc(5,3)">C(5,3)</button>
+                    <button class="lab-btn secondary" onclick="setCalc(4,2)">C(4,2)</button>
+                    <button class="lab-btn secondary" onclick="setCalc(4,3)">C(4,3)</button>
+                </div>
+                <div id="cc-msg" class="lab-msg" style="display:none"></div>`;
+        }
+
+        function setCalc(n, k) {
+            document.getElementById('cc-n').value = n;
+            document.getElementById('cc-k').value = k;
+            runCalc();
+        }
+
+        function runCalc() {
+            const n = num('cc-n'), k = num('cc-k');
+            if (isNaN(n) || isNaN(k) || !Number.isInteger(n) || !Number.isInteger(k)) {
+                return setMsg('cc-msg', 'info', 'Escribe valores enteros para n y k.');
+            }
+            if (n < 0 || n > 12 || k < 0 || k > n) {
+                return setMsg('cc-msg', 'info', 'Usa n entre 0 y 12, y k entre 0 y n.');
+            }
+            const r = comb(n, k);
+            const detalle = `C(${n},${k}) = ${n}! / (${k}!·${n - k}!) = ${fact(n)} / (${fact(k)}·${fact(n - k)}) = <b>${r}</b>`;
+            if (r <= 4) {
+                setMsg('cc-msg', 'good', `${detalle}<br>${r} combinaciones ≤ 4 intentos: ¡alcanza!`);
+            } else {
+                setMsg('cc-msg', 'warn', `${detalle}<br>${r} combinaciones > 4 intentos: no alcanza.`);
+            }
+        }
+
+        /* =========================================================
+           RESPUESTA ABIERTA (en lugar de elegir entre botones)
+           ========================================================= */
+        function renderOpenAnswer(question) {
+            const box = document.createElement('div');
+            box.className = 'open-form';
+            box.innerHTML = `
+                <p class="open-q">${question}</p>
+                <div class="lab-row">
+                    Opción: <input id="open-opt" class="lab-input wide" type="text" maxlength="12" placeholder="A o B">
+                    Combinaciones: <input id="open-num" class="lab-input" type="number" step="any">
+                </div>
+                <button class="option-btn" onclick="submitOpen()">Sellar mi decisión</button>
+                <div id="open-msg" class="lab-msg" style="display:none"></div>`;
+            optionsContainer.appendChild(box);
+        }
+
+        function submitOpen() {
+            const raw = document.getElementById('open-opt').value;
+            const opt = raw.trim().toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/opcion|\s|:|\./g, '');
+            const n = num('open-num');
+            if (!opt || isNaN(n)) {
+                return setMsg('open-msg', 'info', 'Completa ambos campos antes de sellar tu decisión.');
+            }
+            loadScene(opt === 'b' && n === 4 ? 'victoria' : 'gameover');
+        }
+    </script>
+</body>
+</html>
